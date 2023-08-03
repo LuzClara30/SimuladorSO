@@ -36,7 +36,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 3:
         instructionThree(memoria1)
     elif valor == 4:
-        instructionFour()
+        instructionFour(memoria1, memoria2)
     elif valor == 5:
         instructionFive()
     elif valor == 6:
@@ -116,16 +116,25 @@ def instructionTwo(memoria1):
 # Suma: memoria 1 + AC
 def instructionThree(memoria1):
     global AC
-    AC = AC + BinarioADecimal(memoria1)
-    print(AC)
+    AC = BinarioADecimal(memoria1) + AC
     print("Instruccion 3")
 
 # Suma: memoria 1 + memoria 2 + AC
-def instructionFour():
+def instructionFour(memoria1, memoria2):
+    global AC
+    global Datos
+    temp = AC
+    mem1 = BinarioADecimal(memoria1)
+    mem2 = BinarioADecimal(memoria2)
+    dato1 = BinarioADecimal(Datos[str(mem1)])
+    dato2 = BinarioADecimal(Datos[str(mem2)])
+    AC = temp + dato1 + dato2
+    print(AC)
     print("Instruccion 4")
 
 # Resta: AC – memoria 1, almacena en AC
 def instructionFive():
+    
     print("Instruccion 5")
 
 # Resta: AC – memoria 1, almacena en memoria 2
