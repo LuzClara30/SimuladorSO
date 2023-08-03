@@ -42,7 +42,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 6:
         instructionSix(memoria1, memoria2)
     elif valor == 7:
-        instructionSeven()
+        instructionSeven(memoria1)
     elif valor == 8:
         instructionEight()
     elif valor == 9:
@@ -120,7 +120,6 @@ def instructionTwo(memoria1):
     num = DecimalABinario(AC)
     num2 = BinarioADecimal(memoria1)
     Datos[str(num2)] = num
-    print(num)
     print("Instruccion 2")
 # Suma: memoria 1 + AC
 def instructionThree(memoria1):
@@ -155,13 +154,15 @@ def instructionSix(memoria1, memoria2):
     global Datos
     num2 = BinarioADecimal(memoria2)
     Datos[str(num2)] = DecimalABinario(num)
-    print(DecimalABinario(num))
-
-
     print("Instruccion 6")
 
 # Multiplicación: memoria 1 x AC, almacena en AC
-def instructionSeven():
+def instructionSeven(memoria1):
+    global AC
+    temp = AC
+    mem1 = BinarioADecimal(memoria1)
+    dato1 = BinarioADecimal(Datos[str(mem1)])
+    AC = dato1 * temp
     print("Instruccion 7")
 
 # Carga de AC desde dispositivo de E/S, dónde existen hasta 10 dispositivos (identificados del 1 al 10)
