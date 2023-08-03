@@ -8,6 +8,7 @@ AC = 0 # Acumulador
 
 Memoria = {} # Memoria
 Datos = {} # Datos
+ES = {} # Entrada / Salida
 
 # Declaracion de funciones
 
@@ -65,7 +66,18 @@ def readMemoryFile(): # Funcion que lee el archivo de memoria
 
     # Ahora 'diccionario' contiene la información del archivo en formato de diccionario
     print(Memoria)
+# leer el archivo Es y cargarlo al diccionario 
+def readESFile(): # Funcion que lee el archivo de ES
+        # Abrir el archivo en modo de lectura
+    with open('ES.txt', 'r') as archivo:
+        contenido = archivo.read()
 
+    global ES
+    # Convertir el contenido JSON en un diccionario
+    ES = json.loads(contenido)
+
+    # Ahora 'diccionario' contiene la información del archivo en formato de diccionario
+    print(ES)
 # Funciones que representan las instrucciones
 
 # Carga de memoria 1 hacia AC
@@ -147,6 +159,7 @@ def initial(): # Funcion que inicializa el procesador
 def Main(): # Llamada a la funcion principal
    readJsonDataFile() # Llamada a la funcion que lee el archivo de instrucciones
    readMemoryFile()
+   readESFile()
    initial()
 
 Main() # Llamada a la funcion principal
