@@ -34,7 +34,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 2:
       instructionTwo(memoria1)
     elif valor == 3:
-        instructionThree()
+        instructionThree(memoria1)
     elif valor == 4:
         instructionFour()
     elif valor == 5:
@@ -114,7 +114,10 @@ def instructionTwo(memoria1):
     Datos[str(num2)] = num
     print("Instruccion 2")
 # Suma: memoria 1 + AC
-def instructionThree():
+def instructionThree(memoria1):
+    global AC
+    AC = AC + BinarioADecimal(memoria1)
+    print(AC)
     print("Instruccion 3")
 
 # Suma: memoria 1 + memoria 2 + AC
