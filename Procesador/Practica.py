@@ -40,7 +40,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 5:
         instructionFive(memoria1)
     elif valor == 6:
-        instructionSix()
+        instructionSix(memoria1, memoria2)
     elif valor == 7:
         instructionSeven()
     elif valor == 8:
@@ -93,6 +93,14 @@ def readESFile(): # Funcion que lee el archivo de ES
 
     # Ahora 'diccionario' contiene la información del archivo en formato de diccionario
     print(ES)
+#resta AC - Memoria1 o Memoria2
+def restaACMemory(memoria1):
+    global AC
+    global Datos
+    temp = AC
+    mem1 = BinarioADecimal(memoria1)
+    dato1 = BinarioADecimal(Datos[str(mem1)])
+    return temp - dato1
 # Funciones que representan las instrucciones
 
 # Carga de memoria 1 hacia AC
@@ -112,6 +120,7 @@ def instructionTwo(memoria1):
     num = DecimalABinario(AC)
     num2 = BinarioADecimal(memoria1)
     Datos[str(num2)] = num
+    print(num)
     print("Instruccion 2")
 # Suma: memoria 1 + AC
 def instructionThree(memoria1):
@@ -130,7 +139,6 @@ def instructionFour(memoria1, memoria2):
     mem1 = BinarioADecimal(memoria1)
     mem2 = BinarioADecimal(memoria2)
     dato1 = BinarioADecimal(Datos[str(mem1)])
-    print(dato1)
     dato2 = BinarioADecimal(Datos[str(mem2)])
     AC = temp + dato1 + dato2
     print("Instruccion 4")
@@ -138,16 +146,18 @@ def instructionFour(memoria1, memoria2):
 # Resta: AC – memoria 1, almacena en AC
 def instructionFive(memoria1):
     global AC
-    global Datos
-    temp = AC
-    mem1 = BinarioADecimal(memoria1)
-    dato1 = BinarioADecimal(Datos[str(mem1)])
-    AC = temp - dato1
-    print(dato1)
+    AC = restaACMemory(memoria1)
     print("Instruccion 5")
 
 # Resta: AC – memoria 1, almacena en memoria 2
-def instructionSix():
+def instructionSix(memoria1, memoria2):
+    num = restaACMemory(memoria1)
+    global Datos
+    num2 = BinarioADecimal(memoria2)
+    Datos[str(num2)] = DecimalABinario(num)
+    print(DecimalABinario(num))
+
+
     print("Instruccion 6")
 
 # Multiplicación: memoria 1 x AC, almacena en AC
