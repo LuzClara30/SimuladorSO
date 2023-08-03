@@ -50,7 +50,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 10:
         instructionTen()
     elif valor == 11:
-        instructionEleven()
+        instructionEleven(memoria1, memoria2)
     elif valor == 12:
         instructionTwelve()
     elif valor == 13:
@@ -101,6 +101,21 @@ def restaACMemory(memoria1):
     mem1 = BinarioADecimal(memoria1)
     dato1 = BinarioADecimal(Datos[str(mem1)])
     return temp - dato1
+#suma de memoria1 y memoria2
+def sumaMemorias(memoria1, memoria2):
+    global Datos
+    mem1 = BinarioADecimal(memoria1)
+    mem2 = BinarioADecimal(memoria2)
+    dato1 = BinarioADecimal(Datos[str(mem1)])
+    dato2 = BinarioADecimal(Datos[str(mem2)])
+    return dato1 + dato2
+#Memoria1 x AC
+def Memoria1xAC(memoria1):
+    global AC
+    temp = AC
+    mem1 = BinarioADecimal(memoria1)
+    dato1 = BinarioADecimal(Datos[str(mem1)])
+    return dato1 * temp
 # Funciones que representan las instrucciones
 
 # Carga de memoria 1 hacia AC
@@ -135,11 +150,8 @@ def instructionFour(memoria1, memoria2):
     global AC
     global Datos
     temp = AC
-    mem1 = BinarioADecimal(memoria1)
-    mem2 = BinarioADecimal(memoria2)
-    dato1 = BinarioADecimal(Datos[str(mem1)])
-    dato2 = BinarioADecimal(Datos[str(mem2)])
-    AC = temp + dato1 + dato2
+    valor = sumaMemorias(memoria1, memoria2)
+    AC = temp + valor
     print("Instruccion 4")
 
 # Resta: AC – memoria 1, almacena en AC
@@ -152,17 +164,15 @@ def instructionFive(memoria1):
 def instructionSix(memoria1, memoria2):
     num = restaACMemory(memoria1)
     global Datos
-    num2 = BinarioADecimal(memoria2)
-    Datos[str(num2)] = DecimalABinario(num)
+    clave = BinarioADecimal(memoria2)
+    Datos[str(clave)] = DecimalABinario(num)
     print("Instruccion 6")
 
 # Multiplicación: memoria 1 x AC, almacena en AC
 def instructionSeven(memoria1):
     global AC
-    temp = AC
-    mem1 = BinarioADecimal(memoria1)
-    dato1 = BinarioADecimal(Datos[str(mem1)])
-    AC = dato1 * temp
+    resultado = Memoria1xAC(memoria1)
+    AC = resultado
     print("Instruccion 7")
 
 # Carga de AC desde dispositivo de E/S, dónde existen hasta 10 dispositivos (identificados del 1 al 10)
@@ -174,11 +184,19 @@ def instructionNine():
     print("Instruccion 9")
 
 # Suma: memoria 1 + memoria 2, almacena en memoria 1
-def instructionTen():
+def instructionTen(memoria1, memoria2):
+    resultado = sumaMemorias(memoria1, memoria2)
+    global Datos
+    clave = BinarioADecimal(memoria1)
+    Datos[str(clave)] = DecimalABinario(resultado)
     print("Instruccion 10")
 
 # Multiplicación: memoria 1 x AC, almacena en memoria 2
-def instructionEleven():
+def instructionEleven(memoria1, memoria2):
+    resultado = Memoria1xAC(memoria1)
+    global Datos
+    clave = BinarioADecimal(memoria2)
+    Datos[str(clave)] = DecimalABinario(resultado)
     print("Instruccion 11")
 
 # División: AC / memoria 1, almacena en AC
