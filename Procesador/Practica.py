@@ -11,13 +11,28 @@ Datos = {} # Datos
 ES = {} # Entrada / Salida
 
 # Declaracion de funciones
+# Funcines Logicas del procesador
+def BinarioADecimal(string):#recibe string devuelve int
+    binario = int(string)
+    decimal = 0
+    i = 0
+    while (binario>0):
+        digito  = binario%10
+        binario = int(binario//10)
+        decimal = decimal+digito*(2**i)
+        i = i+1
+    return decimal
+
+def DecimalABinario(num):#recibe int devuelve string
+    binar = bin(num)
+    return str(binar)[2::]
 
 # Funcion que permite saber que instrucion ejecutar segun el valor que se le pase
-def selectInstruction(valor):
+def selectInstruction(valor, memoria1, memoria2):
     if valor == 1:
-       instructionOne() #llamar a una funcion 
+       instructionOne(memoria1) #llamar a una funcion 
     elif valor == 2:
-      instructionTwo()
+      instructionTwo(memoria1)
     elif valor == 3:
         instructionThree()
     elif valor == 4:
@@ -81,13 +96,23 @@ def readESFile(): # Funcion que lee el archivo de ES
 # Funciones que representan las instrucciones
 
 # Carga de memoria 1 hacia AC
-def instructionOne():
+def instructionOne(memoria1):
+    global Datos
+    global AC
+    num = BinarioADecimal(memoria1)
+    num2 = BinarioADecimal(Datos[str(num)])
+    #Carga a AC
+    AC = num2
     print("Instruccion 1")
 
 # Almacenar en memoria 1 desde AC
-def instructionTwo():
+def instructionTwo(memoria1):
+    global AC
+    global Datos
+    num = DecimalABinario(AC)
+    num2 = BinarioADecimal(memoria1)
+    Datos[str(num2)] = num
     print("Instruccion 2")
-
 # Suma: memoria 1 + AC
 def instructionThree():
     print("Instruccion 3")
@@ -132,30 +157,12 @@ def instructionTwelve():
 def instructionThirteen():
     print("Instruccion 13")
 
-# Funcines Logicas del procesador
-
-def BinarioADecimal(string):#recibe string devuelve int
-    binario = int(string)
-    decimal = 0
-    i = 0
-    while (binario>0):
-        digito  = binario%10
-        binario = int(binario//10)
-        decimal = decimal+digito*(2**i)
-        i = i+1
-    return decimal
-
-def DecimalABinario(num):#recibe int devuelve string
-    binar = bin(num)
-    return str(binar)[2::]
-
 def initial(): # Funcion que inicializa el procesador
     for clave, valor in Memoria.items():
         decimal = BinarioADecimal(valor[:4])
         memoria1 = valor[4:15]
         memoria2 = valor[15:]
-        print(decimal, memoria1, memoria2)
-        selectInstruction(decimal)
+        selectInstruction(decimal, memoria1, memoria2)
     
     # Al finalizar convetir los diccionarios a JSON y guardarlos en su respectivo archivo
 
