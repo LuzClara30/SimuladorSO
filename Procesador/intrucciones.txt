@@ -1,0 +1,13 @@
+Carga de memoria 1 hacia AC
+Almacenar en memoria 1 desde AC
+Suma: memoria 1 + AC
+Suma: memoria 1 + memoria 2 + AC
+Resta: AC – memoria 1, almacena en AC
+Resta: AC – memoria 1, almacena en memoria 2
+Multiplicación: memoria 1 x AC, almacena en AC
+Carga de AC desde dispositivo de E/S, dónde existen hasta 10 dispositivos (identificados del 1 al 10) y los datos (tipo decimal) en ellos se generan de manera aleatoria 5 segundos.
+Guardar en E/S desde AC, almacena el contenido de AC en un dispositivo de E/S
+Suma: memoria 1 + memoria 2, almacena en memoria 1
+Multiplicación: memoria 1 x AC, almacena en memoria 2
+División: AC / memoria 1, almacena en AC
+División: AC / memoria 1, almacena en memoria 2
