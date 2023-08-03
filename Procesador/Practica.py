@@ -52,9 +52,9 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 11:
         instructionEleven(memoria1, memoria2)
     elif valor == 12:
-        instructionTwelve()
+        instructionTwelve(memoria1)
     elif valor == 13:
-        instructionThirteen()
+        instructionThirteen(memoria1, memoria2)
 
 # Funciones de lectura y escritura de archivos
 
@@ -116,14 +116,21 @@ def Memoria1xAC(memoria1):
     mem1 = BinarioADecimal(memoria1)
     dato1 = BinarioADecimal(Datos[str(mem1)])
     return dato1 * temp
+#AC / memoria 1
+def divisionACMemoria(memoria1):
+    global AC
+    temp = AC
+    mem1 = BinarioADecimal(memoria1)
+    dato1 = BinarioADecimal(Datos[str(mem1)])
+    return AC / dato1
 # Funciones que representan las instrucciones
 
 # Carga de memoria 1 hacia AC
 def instructionOne(memoria1):
     global Datos
     global AC
-    num = BinarioADecimal(memoria1)
-    num2 = BinarioADecimal(Datos[str(num)])
+    clave = BinarioADecimal(memoria1)
+    num2 = BinarioADecimal(Datos[str(clave)])
     #Carga a AC
     AC = num2
     print("Instruccion 1")
@@ -200,11 +207,18 @@ def instructionEleven(memoria1, memoria2):
     print("Instruccion 11")
 
 # División: AC / memoria 1, almacena en AC
-def instructionTwelve():
+def instructionTwelve(memoria1):
+    global AC
+    resultado = divisionACMemoria(memoria1)
+    AC = resultado
     print("Instruccion 12")
 
 # División: AC / memoria 1, almacena en memoria 2
-def instructionThirteen():
+def instructionThirteen(memoria1, memoria2):
+    resultado = divisionACMemoria(memoria1)
+    global Datos
+    clave = BinarioADecimal(memoria2)
+    Datos[str(clave)] = DecimalABinario(resultado)
     print("Instruccion 13")
 
 def initial(): # Funcion que inicializa el procesador
