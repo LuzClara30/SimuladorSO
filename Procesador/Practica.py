@@ -151,7 +151,10 @@ def DecimalABinario(num):#recibe int devuelve string
 
 def initial(): # Funcion que inicializa el procesador
     for clave, valor in Memoria.items():
-        decimal = BinarioADecimal(valor[0:4])
+        decimal = BinarioADecimal(valor[:4])
+        memoria1 = valor[4:15]
+        memoria2 = valor[15:]
+        print(decimal, memoria1, memoria2)
         selectInstruction(decimal)
     
     # Al finalizar convetir los diccionarios a JSON y guardarlos en su respectivo archivo
