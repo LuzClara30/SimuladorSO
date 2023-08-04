@@ -9,10 +9,10 @@ AC = 0 # Acumulador
 Memoria = {} # Memoria
 Datos = {} # Datos
 ES = {} # Entrada / Salida
-ContadorEscrituraES = 0 
 
-# Declaracion de funciones
-# Funcines Logicas del procesador
+# Declaracion de funciones ----------------------------------------------------------------------------------------
+
+# Funcion para convertir de binario a decimal
 def BinarioADecimal(string):#recibe string devuelve int
     binario = int(string)
     decimal = 0
@@ -23,6 +23,8 @@ def BinarioADecimal(string):#recibe string devuelve int
         decimal = decimal+digito*(2**i)
         i = i+1
     return decimal
+
+# Funcion para convertir de decimal a binario
 def DecimalABinario(num):#recibe int devuelve string
     binar = bin(num)
     return (str(binar)).split("b")[1]
@@ -46,7 +48,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 8:
         instructionEight(memoria1)
     elif valor == 9:
-        instructionNine()
+        instructionNine(memoria1)
     elif valor == 10:
         instructionTen(memoria1, memoria2)
     elif valor == 11:
@@ -56,7 +58,7 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 13:
         instructionThirteen(memoria1, memoria2)
 
-# Funciones de lectura y escritura de archivos
+# Funciones de lectura y escritura de archivos ----------------------------------------------------------------------
 
 def readJsonDataFile(): # Funcion que lee el archivo de instrucciones
     # Abrir el archivo en modo de lectura
@@ -81,6 +83,7 @@ def readMemoryFile(): # Funcion que lee el archivo de memoria
 
     # Ahora 'diccionario' contiene la información del archivo en formato de diccionario
     print(Memoria)
+
 # leer el archivo Es y cargarlo al diccionario 
 def readESFile(): # Funcion que lee el archivo de ES
         # Abrir el archivo en modo de lectura
@@ -93,6 +96,8 @@ def readESFile(): # Funcion que lee el archivo de ES
 
     # Ahora 'diccionario' contiene la información del archivo en formato de diccionario
     print(ES)
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 #resta AC - Memoria1 o Memoria2
 def restaACMemory(memoria1):
     global AC
@@ -101,6 +106,7 @@ def restaACMemory(memoria1):
     mem1 = BinarioADecimal(memoria1)
     dato1 = BinarioADecimal(Datos[str(mem1)])
     return temp - dato1
+
 #suma de memoria1 y memoria2
 def sumaMemorias(memoria1, memoria2):
     global Datos
@@ -109,6 +115,7 @@ def sumaMemorias(memoria1, memoria2):
     dato1 = BinarioADecimal(Datos[str(mem1)])
     dato2 = BinarioADecimal(Datos[str(mem2)])
     return dato1 + dato2
+
 #Memoria1 x AC
 def Memoria1xAC(memoria1):
     global AC
@@ -116,6 +123,7 @@ def Memoria1xAC(memoria1):
     mem1 = BinarioADecimal(memoria1)
     dato1 = BinarioADecimal(Datos[str(mem1)])
     return dato1 * temp
+
 #AC / memoria 1
 def divisionACMemoria(memoria1):
     global AC
@@ -123,7 +131,8 @@ def divisionACMemoria(memoria1):
     mem1 = BinarioADecimal(memoria1)
     dato1 = BinarioADecimal(Datos[str(mem1)])
     return AC / dato1
-# Funciones que representan las instrucciones
+
+# Funciones que representan las instrucciones ------------------------------------------------------------------------
 
 # Carga de memoria 1 hacia AC
 def instructionOne(memoria1):
@@ -143,6 +152,7 @@ def instructionTwo(memoria1):
     num2 = BinarioADecimal(memoria1)
     Datos[str(num2)] = num
     print("Instruccion 2")
+    
 # Suma: memoria 1 + AC
 def instructionThree(memoria1):
     global AC
@@ -185,16 +195,18 @@ def instructionSeven(memoria1):
 # Carga de AC desde dispositivo de E/S, dónde existen
 #  hasta 10 dispositivos (identificados del 1 al 10)
 def instructionEight(memoria1):
-    global ES
+    global ES, AC
     posicion = BinarioADecimal(memoria1)
-    AC = ES[str(posicion)]
+    datos = ES[str(posicion)]
+    AC = BinarioADecimal(datos) 
     print("Instruccion 8")
 
 # Guardar en E/S desde AC, almacena el contenido de AC en un dispositivo de E/S
-def instructionNine():
-    global AC, ContadorEscrituraES
-    ES[str(ContadorEscrituraES)] = str(int(AC))
-    ContadorEscrituraES +=1
+def instructionNine(memoria1):
+    global AC, ES
+    posicion = BinarioADecimal(memoria1)
+    datos = DecimalABinario(int(AC))
+    ES[str(posicion)] = datos
     print("Instruccion 9")
 
 # Suma: memoria 1 + memoria 2, almacena en memoria 1
@@ -228,6 +240,8 @@ def instructionThirteen(memoria1, memoria2):
     Datos[str(clave)] = DecimalABinario(resultado)
     print("Instruccion 13")
 
+# --------------------------------------------------------------------------------------------------------
+
 def actualizar(nombre, diccionario):
     Primero=True
     with open(str(nombre), "w") as archivo:
@@ -251,6 +265,7 @@ def initial(): # Funcion que inicializa el procesador
     print("ACUMULADOR: ")
     print(int(AC))    
     actualizar("datos.txt", Datos)
+    print("DATOS ES: " + str(ES))
     actualizar("ES.txt", ES)
     
     # Al finalizar convetir los diccionarios a JSON y guardarlos en su respectivo archivo
