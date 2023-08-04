@@ -9,6 +9,7 @@ AC = 0 # Acumulador
 Memoria = {} # Memoria
 Datos = {} # Datos
 ES = {} # Entrada / Salida
+ContadorEscrituraES = 0 
 
 # Declaracion de funciones
 # Funcines Logicas del procesador
@@ -22,10 +23,9 @@ def BinarioADecimal(string):#recibe string devuelve int
         decimal = decimal+digito*(2**i)
         i = i+1
     return decimal
-
 def DecimalABinario(num):#recibe int devuelve string
     binar = bin(num)
-    return str(binar)[2::]
+    return (str(binar)).split("b")[1]
 
 # Funcion que permite saber que instrucion ejecutar segun el valor que se le pase
 def selectInstruction(valor, memoria1, memoria2):
@@ -44,11 +44,11 @@ def selectInstruction(valor, memoria1, memoria2):
     elif valor == 7:
         instructionSeven(memoria1)
     elif valor == 8:
-        instructionEight()
+        instructionEight(memoria1)
     elif valor == 9:
         instructionNine()
     elif valor == 10:
-        instructionTen()
+        instructionTen(memoria1, memoria2)
     elif valor == 11:
         instructionEleven(memoria1, memoria2)
     elif valor == 12:
@@ -182,12 +182,19 @@ def instructionSeven(memoria1):
     AC = resultado
     print("Instruccion 7")
 
-# Carga de AC desde dispositivo de E/S, dónde existen hasta 10 dispositivos (identificados del 1 al 10)
-def instructionEight():
+# Carga de AC desde dispositivo de E/S, dónde existen
+#  hasta 10 dispositivos (identificados del 1 al 10)
+def instructionEight(memoria1):
+    global ES
+    posicion = BinarioADecimal(memoria1)
+    AC = ES[str(posicion)]
     print("Instruccion 8")
 
 # Guardar en E/S desde AC, almacena el contenido de AC en un dispositivo de E/S
 def instructionNine():
+    global AC, ContadorEscrituraES
+    ES[str(ContadorEscrituraES)] = str(int(AC))
+    ContadorEscrituraES +=1
     print("Instruccion 9")
 
 # Suma: memoria 1 + memoria 2, almacena en memoria 1
@@ -221,12 +228,30 @@ def instructionThirteen(memoria1, memoria2):
     Datos[str(clave)] = DecimalABinario(resultado)
     print("Instruccion 13")
 
+def actualizar(nombre, diccionario):
+    Primero=True
+    with open(str(nombre), "w") as archivo:
+        archivo.write('{\n')
+        for clave, valor in diccionario.items():
+            if Primero:
+                archivo.write('"'+clave+'": '+'"'+valor+'"')
+                Primero=False
+            else:
+                archivo.write(',\n"'+clave+'": '+'"'+valor+'"')
+
+        archivo.write('\n}\n')
+
 def initial(): # Funcion que inicializa el procesador
     for clave, valor in Memoria.items():
         decimal = BinarioADecimal(valor[:4])
         memoria1 = valor[4:15]
         memoria2 = valor[15:]
         selectInstruction(decimal, memoria1, memoria2)
+    global AC, Datos, ES
+    print("ACUMULADOR: ")
+    print(int(AC))    
+    actualizar("datos.txt", Datos)
+    actualizar("ES.txt", ES)
     
     # Al finalizar convetir los diccionarios a JSON y guardarlos en su respectivo archivo
 
