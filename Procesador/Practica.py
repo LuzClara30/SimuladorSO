@@ -9,7 +9,7 @@ AC = 0 # Acumulador
 Memoria = {} # Memoria
 Datos = {} # Datos
 ES = {} # Entrada / Salida
-
+Jumpline   = 0
 # Declaracion de funciones ----------------------------------------------------------------------------------------
 
 # Funcion para convertir de binario a decimal
@@ -26,11 +26,12 @@ def BinarioADecimal(string):#recibe string devuelve int
 
 # Funcion para convertir de decimal a binario
 def DecimalABinario(num):#recibe int devuelve string
-    binar = bin(num)
+
+    binar = bin(int(num))
     return (str(binar)).split("b")[1]
 
 # Funcion que permite saber que instrucion ejecutar segun el valor que se le pase
-def selectInstruction(valor, memoria1, memoria2):
+def selectInstruction(valor, modoOp, memoria1, memoria2):
     if valor == 1:
        instructionOne(memoria1) #llamar a una funcion 
     elif valor == 2:
@@ -57,6 +58,9 @@ def selectInstruction(valor, memoria1, memoria2):
         instructionTwelve(memoria1)
     elif valor == 13:
         instructionThirteen(memoria1, memoria2)
+    elif valor == 14:
+        instructionFourteen(modoOp, memoria1, memoria2)
+    
 
 # Funciones de lectura y escritura de archivos ----------------------------------------------------------------------
 
@@ -239,7 +243,37 @@ def instructionThirteen(memoria1, memoria2):
     clave = BinarioADecimal(memoria2)
     Datos[str(clave)] = DecimalABinario(resultado)
     print("Instruccion 13")
-
+# IF AC comparado con memoria1
+def instructionFourteen(modoOp, memoria1, memoria2):
+    global AC, Datos, Jumpline
+    posicion = BinarioADecimal(memoria1)
+    dato = Datos[str(posicion)]
+    datoDecimal = BinarioADecimal(dato)
+    if(modoOp == 0):# igual =
+        if (AC == datoDecimal):
+            Jumpline = BinarioADecimal(memoria2)
+            print("iguales")
+    elif(modoOp == 1): # mayor >
+        if (AC > datoDecimal):
+            Jumpline = BinarioADecimal(memoria2)
+            print("Mayor")
+    elif(modoOp == 2): # menor <
+        if (AC < datoDecimal):
+            Jumpline = BinarioADecimal(memoria2)
+            print("Menor")
+    elif(modoOp ==  3): # Mayor igual >=
+        if (AC >= datoDecimal):
+            Jumpline = BinarioADecimal(memoria2)
+            print("Mayor igual")
+    elif(modoOp ==  4): # Menor igual <=
+        if (AC <= datoDecimal):
+            Jumpline = BinarioADecimal(memoria2)
+            print("Menor igual")
+    elif(modoOp ==  5): # diferente !=
+        if (AC != datoDecimal):
+            Jumpline = BinarioADecimal(memoria2)
+            print("Diferente")       
+    print("Intruccion 14")
 # --------------------------------------------------------------------------------------------------------
 
 def actualizar(nombre, diccionario):
@@ -256,11 +290,19 @@ def actualizar(nombre, diccionario):
         archivo.write('\n}\n')
 
 def initial(): # Funcion que inicializa el procesador
+    global Jumpline
     for clave, valor in Memoria.items():
-        decimal = BinarioADecimal(valor[:4])
-        memoria1 = valor[4:15]
-        memoria2 = valor[15:]
-        selectInstruction(decimal, memoria1, memoria2)
+        decimal = BinarioADecimal(valor[:6])
+        modoOp = BinarioADecimal(valor[6:10])
+        memoria1 = valor[10:21]
+        memoria2 = valor[21:]
+        # print("decimal: ", decimal)
+        # print("modoOp: ", modoOp)
+        # print("memoria1: ", memoria1)
+        # print("memoria2: ", memoria2)
+     
+        if( int(clave)>= Jumpline):
+            selectInstruction(decimal, modoOp, memoria1, memoria2)
     global AC, Datos, ES
     print("ACUMULADOR: ")
     print(int(AC))    
